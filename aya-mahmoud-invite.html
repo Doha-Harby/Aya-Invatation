@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Aya &amp; Mahmoud — Save the Date</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --cream:       #f3efe4;
+    --cream-light: #faf7ee;
+    --sage-dark:   #454f3c;
+    --sage:        #66714f;
+    --sage-mid:    #8a9470;
+    --gold:        #b6a06a;
+    --gold-soft:   #d8c9a0;
+    --ink:         #2e2b22;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    min-height: 100%;
+    background: var(--cream);
+  }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    color: var(--ink);
+  }
+
+  .ei-stage {
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background:
+      radial-gradient(ellipse at 20% 15%, rgba(182,160,106,0.14), transparent 55%),
+      radial-gradient(ellipse at 85% 90%, rgba(102,113,79,0.12), transparent 55%),
+      var(--cream);
+    padding: 48px 20px;
+  }
+
+  .ei-frame {
+    position: absolute;
+    inset: 14px;
+    border: 1px solid rgba(46,43,34,0.25);
+    pointer-events: none;
+  }
+  .ei-frame::before, .ei-frame::after {
+    content: '';
+    position: absolute;
+    width: 22px; height: 22px;
+    border: 1px solid var(--gold);
+  }
+  .ei-frame::before { top: -1px; left: -1px; border-right: none; border-bottom: none; }
+  .ei-frame::after { bottom: -1px; right: -1px; border-left: none; border-top: none; }
+
+  .ei-eyebrow {
+    position: absolute;
+    top: 42px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--sage-dark);
+    opacity: 0.8;
+    transition: opacity 0.5s ease;
+  }
+  .ei-open .ei-eyebrow { opacity: 0; }
+
+  /* ---------- ENVELOPE ---------- */
+  .ei-env-wrap {
+    position: relative;
+    perspective: 1600px;
+    z-index: 2;
+    transition: transform 0.9s cubic-bezier(.6,.05,.28,1), opacity 0.6s ease 0.35s;
+  }
+  .ei-open .ei-env-wrap {
+    opacity: 0;
+    transform: translateY(30px) scale(0.9);
+    pointer-events: none;
+  }
+
+  .ei-envelope {
+    position: relative;
+    width: min(78vw, 300px);
+    aspect-ratio: 3 / 2.05;
+    cursor: pointer;
+  }
+
+  .ei-env-back {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg, var(--sage) 0%, var(--sage-dark) 100%);
+    box-shadow: 0 24px 50px -18px rgba(46,43,34,0.45);
+  }
+  .ei-env-back::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(35deg, transparent 49.3%, rgba(0,0,0,0.16) 50%, transparent 50.7%),
+      linear-gradient(-35deg, transparent 49.3%, rgba(255,255,255,0.08) 50%, transparent 50.7%);
+  }
+
+  .ei-env-flap {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 58%;
+    background: linear-gradient(155deg, #566148 0%, var(--sage-dark) 100%);
+    clip-path: polygon(0 0, 100% 0, 50% 100%);
+    transform-origin: top center;
+    transform-style: preserve-3d;
+    transition: transform 1.05s cubic-bezier(.6,.05,.3,1);
+    z-index: 3;
+  }
+  .ei-opening .ei-env-flap, .ei-open .ei-env-flap {
+    transform: rotateX(-178deg);
+  }
+
+  .ei-seal {
+    position: absolute;
+    top: 42%;
+    left: 50%;
+    width: 46px; height: 46px;
+    transform: translate(-50%, -50%) scale(1);
+    border-radius: 50%;
+    background: radial-gradient(circle at 32% 30%, #7c8a63, var(--sage-dark) 70%);
+    box-shadow: 0 6px 14px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--cream-light);
+    z-index: 5;
+    transition: opacity 0.45s ease, transform 0.6s ease;
+  }
+  .ei-opening .ei-seal, .ei-open .ei-seal {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.4) rotate(25deg);
+  }
+
+  .ei-env-pocket {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 60%;
+    clip-path: polygon(0 100%, 100% 100%, 100% 0, 50% 45%, 0 0);
+    background: linear-gradient(200deg, #3d4635 0%, var(--sage-dark) 100%);
+    z-index: 4;
+  }
+
+  .ei-env-card-peek {
+    position: absolute;
+    left: 8%;
+    right: 8%;
+    bottom: 6%;
+    height: 42%;
+    background: var(--cream-light);
+    box-shadow: 0 -6px 18px rgba(0,0,0,0.12);
+    z-index: 2;
+    transition: transform 1s cubic-bezier(.6,.05,.3,1) 0.15s;
+  }
+  .ei-opening .ei-env-card-peek {
+    transform: translateY(-18%);
+  }
+
+  .ei-tap-hint {
+    position: absolute;
+    bottom: -46px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 13px;
+    letter-spacing: 0.28em;
+    text-transform: uppercase;
+    color: var(--sage-dark);
+    opacity: 0.75;
+    white-space: nowrap;
+  }
+  .ei-tap-hint span {
+    display: inline-block;
+    animation: ei-pulse 2.2s ease-in-out infinite;
+  }
+  @keyframes ei-pulse { 0%,100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+  /* ---------- CARD ---------- */
+  .ei-card {
+    position: absolute;
+    z-index: 1;
+    width: min(88vw, 380px);
+    max-width: 92%;
+    text-align: center;
+    opacity: 0;
+    transform: translateY(26px);
+    transition: opacity 0.9s ease 0.55s, transform 0.9s cubic-bezier(.2,.7,.3,1) 0.55s;
+  }
+  .ei-open .ei-card {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .ei-card-eyebrow {
+    font-size: 12px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin: 0 0 18px;
+  }
+
+  .ei-rule {
+    width: 46px;
+    height: 1px;
+    background: var(--gold);
+    margin: 18px auto;
+    position: relative;
+  }
+  .ei-rule::before {
+    content: '❧';
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -55%);
+    background: var(--cream);
+    padding: 0 8px;
+    color: var(--gold);
+    font-size: 15px;
+  }
+
+  .ei-names {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+    font-size: clamp(34px, 8vw, 48px);
+    line-height: 1.15;
+    color: var(--sage-dark);
+    margin: 0;
+  }
+  .ei-amp {
+    display: block;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 0.5em;
+    color: var(--gold);
+    margin: 2px 0;
+  }
+
+  .ei-tagline {
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink);
+    opacity: 0.75;
+    margin: 8px 0 0;
+  }
+
+  .ei-details {
+    margin-top: 28px;
+    padding: 26px 22px;
+    border: 1px solid rgba(182,160,106,0.55);
+    background: rgba(255,255,255,0.35);
+  }
+
+  .ei-date {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    letter-spacing: 0.08em;
+    color: var(--ink);
+    margin: 0;
+  }
+  .ei-day {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--sage);
+    margin-bottom: 6px;
+  }
+
+  .ei-venue {
+    margin-top: 16px;
+    font-size: 18px;
+    color: var(--sage-dark);
+  }
+  .ei-venue strong {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 22px;
+    color: var(--ink);
+    margin-top: 2px;
+  }
+
+  .ei-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 26px;
+  }
+  .ei-dots span {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .ei-dot-1 { background: #454f3c; }
+  .ei-dot-2 { background: #8a9470; }
+  .ei-dot-3 { background: #b6a06a; }
+  .ei-dot-4 { background: #f3efe4; border: 1px solid #b6a06a; }
+
+  .ei-footer-note {
+    margin-top: 22px;
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    color: var(--sage-dark);
+    opacity: 0.7;
+  }
+
+  @media (max-width: 420px) {
+    .ei-stage { min-height: 100vh; padding: 32px 14px; }
+    .ei-eyebrow { top: 28px; font-size: 10px; letter-spacing: 0.32em; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="ei-stage" id="eiStage">
+    <div class="ei-frame"></div>
+    <div class="ei-eyebrow">Save&nbsp;the&nbsp;Date</div>
+
+    <div class="ei-env-wrap" id="eiEnvWrap">
+      <div class="ei-envelope" id="eiEnvelope" role="button" tabindex="0" aria-label="Open the invitation">
+        <div class="ei-env-back"></div>
+        <div class="ei-env-card-peek"></div>
+        <div class="ei-env-pocket"></div>
+        <div class="ei-env-flap"></div>
+        <div class="ei-seal">M&amp;A</div>
+      </div>
+      <div class="ei-tap-hint"><span>Tap the envelope to open</span></div>
+    </div>
+
+    <div class="ei-card">
+      <p class="ei-card-eyebrow">Together with their families</p>
+
+      <h1 class="ei-names">
+        Mahmoud
+        <span class="ei-amp">&amp;</span>
+        Aya
+      </h1>
+
+      <p class="ei-tagline">joyfully invite you to celebrate their engagement</p>
+
+      <div class="ei-rule"></div>
+
+      <div class="ei-details">
+        <p class="ei-date">
+          <span class="ei-day">Saturday</span>
+          29 · 08 · 2026
+        </p>
+
+        <p class="ei-venue">
+          at
+          <strong>Grand Amore</strong>
+        </p>
+
+        <div class="ei-dots">
+          <span class="ei-dot-1"></span>
+          <span class="ei-dot-2"></span>
+          <span class="ei-dot-3"></span>
+          <span class="ei-dot-4"></span>
+        </div>
+      </div>
+
+      <p class="ei-footer-note">We can't wait to celebrate with you</p>
+    </div>
+  </div>
+
+  <script>
+    var stage = document.getElementById('eiStage');
+    var envelope = document.getElementById('eiEnvelope');
+    var envWrap = document.getElementById('eiEnvWrap');
+    var opened = false;
+
+    function openInvite() {
+      if (opened) return;
+      opened = true;
+      stage.classList.add('ei-opening');
+      setTimeout(function () {
+        stage.classList.remove('ei-opening');
+        stage.classList.add('ei-open');
+        envWrap.remove();
+      }, 1400);
+    }
+
+    envelope.addEventListener('click', openInvite);
+    envelope.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openInvite();
+      }
+    });
+  </script>
+
+</body>
+</html>
